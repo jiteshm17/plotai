@@ -13,29 +13,28 @@ class ChatGPT():
     frequency_penalty = 0
     presence_penalty = 0.6
     model = "gpt-3.5-turbo"
+    engine = "gpt35turbo16k"
 
 
     def __init__(self):
-        api_key = os.environ.get("OPENAI_API_KEY")
-        if api_key is None:
-            raise Exception("Please set OPENAI_API_KEY environment variable."
-            "You can obtain API key from https://platform.openai.com/account/api-keys")
-        openai.api_key = api_key
+        openai.api_type = os.getenv("OPENAI_API_TYPE")
+        openai.api_version = os.getenv("OPENAI_API_VERSION")
+        openai.api_base = os.getenv("OPENAI_API_BASE")
+        openai.api_key = os.getenv("OPENAI_API_KEY")
         
-
     @property
     def _default_params(self):
         return {
+            "engine":self.engine,
             "temperature": self.temperature,
             "max_tokens": self.max_tokens,
             "top_p": self.top_p,
             "frequency_penalty": self.frequency_penalty,
             "presence_penalty": self.presence_penalty,
-            "model": self.model,
+            # "model": self.model,
         }
 
     def chat(self, prompt):
-
         params = {
             **self._default_params,
             "messages": [
